@@ -1,0 +1,22 @@
+# Go
+/evm-interpreter-go
+/evm-interpreter-go.exe
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Dependency directories
+vendor/
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+
+# Claude Code
+.claude/settings.local.json
+.mcp.json
+CLAUDE.local.md
