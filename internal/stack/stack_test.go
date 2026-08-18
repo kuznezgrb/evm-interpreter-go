@@ -1,12 +1,14 @@
-package stack
+package stack_test
 
 import (
 	"math/big"
 	"testing"
+
+	"github.com/kuznezgrb/evm-interpreter-go/internal/stack"
 )
 
 func TestStack_Push(t *testing.T) {
-	stack := NewStack()
+	stack := stack.NewStack()
 
 	one := big.NewInt(1)
 	two := big.NewInt(2)
@@ -22,7 +24,7 @@ func TestStack_Push1024(t *testing.T) {
 		}
 	}()
 
-	stack := NewStack()
+	stack := stack.NewStack()
 
 	val := big.NewInt(1)
 
@@ -32,7 +34,7 @@ func TestStack_Push1024(t *testing.T) {
 }
 
 func TestStack_Pop(t *testing.T) {
-	stack := NewStack()
+	stack := stack.NewStack()
 
 	one := big.NewInt(1)
 	two := big.NewInt(2)
@@ -53,7 +55,7 @@ func TestStack_Pop(t *testing.T) {
 }
 
 func TestStack_PopEmpty(t *testing.T) {
-	stack := NewStack()
+	stack := stack.NewStack()
 
 	defer func() {
 		if r := recover(); r == nil {
