@@ -13,6 +13,7 @@ type Operation func() error
 const (
 	STOP  Opcode = 0x00
 	PUSH1 Opcode = 0x60
+	POP   Opcode = 0x50
 )
 
 type Interpreter struct {
@@ -35,6 +36,7 @@ func NewInterpreter(stack *stack.Stack, code []byte) *Interpreter {
 	operations := map[Opcode]Operation{
 		STOP:  inter.stop,
 		PUSH1: inter.push1,
+		POP:   inter.pop,
 	}
 
 	inter.operations = operations
@@ -73,5 +75,11 @@ func (i *Interpreter) push1() error {
 	i.stack.Push(val)
 	i.pc += 2
 
+	return nil
+}
+
+func (i *Interpreter) pop() error {
+	i.stack.Pop()
+	i.pc++
 	return nil
 }

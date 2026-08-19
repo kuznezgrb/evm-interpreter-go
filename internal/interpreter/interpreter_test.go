@@ -27,3 +27,16 @@ func TestInterpreter_Push1(t *testing.T) {
 		t.Errorf("got %v, want %v", stackVal, valReference)
 	}
 }
+
+func TestInterpreter_Pop(t *testing.T) {
+	stack := stack.NewStack()
+	interp := interpreter.NewInterpreter(stack, []byte{0x60, 0x01, 0x60, 0x02, 0x50})
+	interp.Run()
+
+	valReference := new(big.Int).SetBytes([]byte{0x01})
+	stackVal := stack.Pop()
+
+	if valReference.Cmp(stackVal) != 0 {
+		t.Errorf("got %v, want %v", stackVal, valReference)
+	}
+}
