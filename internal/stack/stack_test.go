@@ -98,3 +98,21 @@ func TestStack_PeekN_Panic(t *testing.T) {
 	stack := stack.NewStack()
 	stack.PeekN(10)
 }
+
+func TestStack_Swap(t *testing.T) {
+	stack := stack.NewStack()
+	one := big.NewInt(1)
+	two := big.NewInt(2)
+
+	stack.Push(one)
+	stack.Push(two)
+
+	stack.Swap(1)
+
+	topStack := stack.Pop()
+
+	if one.Cmp(topStack) != 0 {
+		t.Errorf("got %v, want %v", one, topStack)
+	}
+
+}

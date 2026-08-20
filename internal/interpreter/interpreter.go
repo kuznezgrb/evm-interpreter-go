@@ -13,9 +13,28 @@ type Operation func() error
 const (
 	STOP  Opcode = 0x00
 	PUSH1 Opcode = 0x60
-	POP   Opcode = 0x50
-	DUP1  Opcode = 0x80
-	DUP2  Opcode = 0x81
+
+	POP Opcode = 0x50
+
+	DUP1 Opcode = 0x80
+	DUP2 Opcode = 0x81
+
+	SWAP1  Opcode = 0x90
+	SWAP2  Opcode = 0x91
+	SWAP3  Opcode = 0x92
+	SWAP4  Opcode = 0x93
+	SWAP5  Opcode = 0x94
+	SWAP6  Opcode = 0x95
+	SWAP7  Opcode = 0x96
+	SWAP8  Opcode = 0x97
+	SWAP9  Opcode = 0x98
+	SWAP10 Opcode = 0x99
+	SWAP11 Opcode = 0x9A
+	SWAP12 Opcode = 0x9B
+	SWAP13 Opcode = 0x9C
+	SWAP14 Opcode = 0x9D
+	SWAP15 Opcode = 0x9E
+	SWAP16 Opcode = 0x9F
 )
 
 type Interpreter struct {
@@ -41,6 +60,13 @@ func NewInterpreter(stack *stack.Stack, code []byte) *Interpreter {
 		POP:   inter.pop,
 		DUP1:  inter.dup1,
 		DUP2:  inter.dup2,
+	}
+
+	for op := SWAP1; op <= SWAP16; op++ {
+		n := int(op - SWAP1 + 1)
+		operations[op] = func() error {
+			return inter.swap(n)
+		}
 	}
 
 	inter.operations = operations
@@ -108,5 +134,13 @@ func (i *Interpreter) dup2() error {
 
 	val := i.stack.PeekN(1)
 	i.stack.Push(val)
+	return nil
+}
+
+func (i *Interpreter) swap(s int) error {
+	defer func() {
+		i.pc++
+	}()
+	i.stack.Swap(s)
 	return nil
 }

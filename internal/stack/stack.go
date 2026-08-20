@@ -43,3 +43,13 @@ func (s *Stack) PeekN(n int) *big.Int {
 
 	return s.storage[s.top-n]
 }
+
+func (s *Stack) Swap(n int) {
+	if 0 > n || n > s.top {
+		panic("there is no such element in the stack")
+	}
+
+	top := s.storage[s.top]
+	s.storage[s.top] = s.storage[s.top-n]
+	s.storage[s.top-n] = top
+}
