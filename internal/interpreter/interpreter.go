@@ -14,6 +14,8 @@ const (
 	STOP  Opcode = 0x00
 	PUSH1 Opcode = 0x60
 	POP   Opcode = 0x50
+	DUP1  Opcode = 0x80
+	DUP2  Opcode = 0x81
 )
 
 type Interpreter struct {
@@ -37,6 +39,8 @@ func NewInterpreter(stack *stack.Stack, code []byte) *Interpreter {
 		STOP:  inter.stop,
 		PUSH1: inter.push1,
 		POP:   inter.pop,
+		DUP1:  inter.dup1,
+		DUP2:  inter.dup2,
 	}
 
 	inter.operations = operations
@@ -79,7 +83,30 @@ func (i *Interpreter) push1() error {
 }
 
 func (i *Interpreter) pop() error {
+	defer func() {
+		i.pc++
+	}()
 	i.stack.Pop()
-	i.pc++
+
+	return nil
+}
+
+func (i *Interpreter) dup1() error {
+	defer func() {
+		i.pc++
+	}()
+
+	val := i.stack.PeekN(0)
+	i.stack.Push(val)
+	return nil
+}
+
+func (i *Interpreter) dup2() error {
+	defer func() {
+		i.pc++
+	}()
+
+	val := i.stack.PeekN(1)
+	i.stack.Push(val)
 	return nil
 }

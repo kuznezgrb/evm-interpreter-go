@@ -65,3 +65,36 @@ func TestStack_PopEmpty(t *testing.T) {
 
 	stack.Pop()
 }
+
+func TestStack_PeekN(t *testing.T) {
+	one := big.NewInt(1)
+	two := big.NewInt(2)
+
+	stack := stack.NewStack()
+
+	stack.Push(one)
+	stack.Push(two)
+
+	peekVal1 := stack.PeekN(0)
+	peekVal2 := stack.PeekN(1)
+
+	if one.Cmp(peekVal2) != 0 {
+		t.Errorf("got %v, want %v", one, peekVal2)
+	}
+
+	if two.Cmp(peekVal1) != 0 {
+		t.Errorf("got %v, want %v", two, peekVal1)
+	}
+}
+
+func TestStack_PeekN_Panic(t *testing.T) {
+
+	defer func() {
+		if r := recover(); r == nil {
+			t.Fatal("expected panic, but function did not panic")
+		}
+	}()
+
+	stack := stack.NewStack()
+	stack.PeekN(10)
+}
