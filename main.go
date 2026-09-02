@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/kuznezgrb/evm-interpreter-go/internal/interpreter"
-	"github.com/kuznezgrb/evm-interpreter-go/internal/stack"
 	"os"
 	"strings"
+
+	"github.com/kuznezgrb/evm-interpreter-go/internal/interpreter"
+	"github.com/kuznezgrb/evm-interpreter-go/internal/stack"
 )
 
 func main() {
@@ -24,8 +25,8 @@ func main() {
 	}
 
 	stack := stack.NewStack()
-	interp := interpreter.NewInterpreter(stack)
+	interp := interpreter.NewInterpreter(stack, code)
 
-	interp.Run(code)
+	interp.Run()
 
 }
