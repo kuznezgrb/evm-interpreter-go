@@ -10,6 +10,8 @@ import (
 type Opcode byte
 type Operation func() error
 
+var maxUint256Mask = new(big.Int).Sub(new(big.Int).Lsh(big.NewInt(1), 256), big.NewInt(1))
+
 const (
 	STOP   Opcode = 0x00
 	PUSH0  Opcode = 0x5F
@@ -81,6 +83,8 @@ const (
 	SWAP14 Opcode = 0x9D
 	SWAP15 Opcode = 0x9E
 	SWAP16 Opcode = 0x9F
+
+	ADD Opcode = 0x01
 )
 
 type Interpreter struct {
@@ -104,6 +108,7 @@ func NewInterpreter(stack *stack.Stack, code []byte) *Interpreter {
 		STOP:  inter.stop,
 		PUSH0: inter.push0,
 		POP:   inter.pop,
+		ADD:   inter.add,
 	}
 
 	for op := PUSH1; op <= PUSH32; op++ {
@@ -198,5 +203,20 @@ func (i *Interpreter) swap(s int) error {
 		i.pc++
 	}()
 	i.stack.Swap(s)
+	return nil
+}
+
+func (i *Interpreter) add() error {
+	defer func() {
+		i.pc++
+	}()
+
+	oneVal := i.stack.Pop()
+	twoVal := i.stack.Pop()
+	sum := new(big.Int).Add(oneVal, twoVal)
+	sum.And(sum, maxUint256Mask)
+
+	i.stack.Push(sum)
+
 	return nil
 }
