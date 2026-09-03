@@ -85,6 +85,7 @@ const (
 	SWAP16 Opcode = 0x9F
 
 	ADD Opcode = 0x01
+	MUL Opcode = 0x02
 )
 
 type Interpreter struct {
@@ -109,6 +110,7 @@ func NewInterpreter(stack *stack.Stack, code []byte) *Interpreter {
 		PUSH0: inter.push0,
 		POP:   inter.pop,
 		ADD:   inter.add,
+		MUL:   inter.mul,
 	}
 
 	for op := PUSH1; op <= PUSH32; op++ {
@@ -217,6 +219,21 @@ func (i *Interpreter) add() error {
 	sum.And(sum, maxUint256Mask)
 
 	i.stack.Push(sum)
+
+	return nil
+}
+
+func (i *Interpreter) mul() error {
+	defer func() {
+		i.pc++
+	}()
+
+	oneVal := i.stack.Pop()
+	twoVal := i.stack.Pop()
+	mul := new(big.Int).Mul(oneVal, twoVal)
+	mul.And(mul, maxUint256Mask)
+
+	i.stack.Push(mul)
 
 	return nil
 }

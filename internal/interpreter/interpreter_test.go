@@ -218,3 +218,16 @@ func TestInterpreter_Add(t *testing.T) {
 		t.Errorf("got %v, want %v", stackVal, valReference)
 	}
 }
+
+func TestInterpreter_Mul(t *testing.T) {
+	stack := stack.NewStack()
+	interp := interpreter.NewInterpreter(stack, []byte{0x60, 0x03, 0x60, 0x05, 0x02, 0x00})
+	interp.Run()
+
+	valReference := new(big.Int).SetBytes([]byte{0x0f})
+	stackVal := stack.Pop()
+
+	if valReference.Cmp(stackVal) != 0 {
+		t.Errorf("got %v, want %v", stackVal, valReference)
+	}
+}
